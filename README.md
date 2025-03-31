@@ -1,5 +1,7 @@
 # Social Media - Backend
 
+> Frontend：https://github.com/StevenShih-0402/SocialMedia_Frontend
+
 Note:
 - IntelliJ IDEA + Gradle
 - JDK 17
