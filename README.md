@@ -1,122 +1,157 @@
-# Social Media - Backend
+# 🛠️ Social Media - Backend
 
-> Frontend：https://github.com/StevenShih-0402/SocialMedia_Frontend
+本專案為簡易社群媒體系統的後端服務，使用 Spring Boot 開發，提供完整的 RESTful API 功能，支援用戶註冊、登入、發文、留言與貼文管理。
 
-![image](https://github.com/user-attachments/assets/546359e5-fdf3-402a-8f9a-73173cb50f6e)
+🔗 前端專案：[SocialMedia_Frontend](https://github.com/StevenShih-0402/SocialMedia_Frontend)
 
-Note:
-- IntelliJ IDEA + Gradle
-- JDK 17
-- Spring Boot 3.4.4
-- Oracle 19c + SQL Developer
-- localhost:8080
-- 身分驗證：JWT
+![系統畫面](https://github.com/user-attachments/assets/546359e5-fdf3-402a-8f9a-73173cb50f6e)
 
-每張資料表有設定序列(例如：SEQ_USERS) 與觸發器(例如：TRG_USERS_ID) 自動新增 id
+---
 
-系統架構：
-1. 展示層(Controller)
-2. 業務層(Service)
-3. 資料層(DAO、Repository、Entity)
-4. 共用層(DTO、Utils、Exception、Response、Enums、Config、Valid)
+## ⚙️ 開發環境
 
-總共有 10 支 API：
-1. 使用者註冊(`/api/user/register`)
-2. 使用者登入(`/api/user/login`)
-3. 使用者登出(`/api/user/logout`)
-4. 查詢使用者資訊(`/api/user/query-user`)
-5. 新增貼文(`/api/post/create-post`)：新增時會自動添加一條留言，內容為發文時間。
-6. 查詢所有貼文(`/api/post/query-posts`)：加入分頁(Pageable)查詢設計，讓前端不會一次加載太多內容
-7. 編輯貼文(`/api/post/update-post`)
-8. 刪除貼文(`/api/post/delete-post`)：會連貼文內的留言一併刪除。
-9. 新增留言(`/api/comment/create-comment`)
-10. 查詢一篇貼文的所有留言(`/api/comment/query-comments`)
+| 項目 | 技術 |
+|------|------|
+| 開發工具 | IntelliJ IDEA + Gradle |
+| JDK 版本 | JDK 17 |
+| 框架 | Spring Boot 3.4.4 |
+| 資料庫 | Oracle 19c（搭配 SQL Developer） |
+| 驗證機制 | JWT |
+| 啟動位址 | `localhost:8080` |
 
-[PostMan 測試檔案](https://drive.google.com/uc?export=download&id=1KBRUL9vdq2cnxV6Og4wrYUjTZnAXpCUF)
+資料庫中每張表皆設有自動編號的序列與觸發器（如 `SEQ_USERS`、`TRG_USERS_ID`）。
 
-資料庫設定：
+---
 
-0. 連線到容器
+## 🧱 系統架構分層
 
-    `docker exec -it oracle19c bash`
-
-1. 透過 SQL*Plus 連線到 Oracle
-
-    `sqlplus / as sysdba`
-
-2. 建立 PDB
-
-    `CREATE PLUGGABLE DATABASE SMDB ADMIN USER steven IDENTIFIED BY steven FILE_NAME_CONVERT = ('/opt/oracle/oradata/ORCLCDB/', '/opt/oracle/oradata/SMDB/');`
-
-3. 連線到 PDB
-
-    `ALTER PLUGGABLE DATABASE SMDB OPEN;`
-
-4. 確認連線狀態
-
-    `SHOW PDBS;`
-
-```sql
-    CON_ID CON_NAME                       OPEN MODE  RESTRICTED
----------- ------------------------------ ---------- ----------
-         2 PDB$SEED                       READ ONLY  NO
-         3 ORCLPDB1                       READ WRITE NO
-         4 SMDB                           READ WRITE NO
+```
+├── Controller         # 展示層，負責處理 API 請求
+├── Service            # 業務層，處理商業邏輯
+├── Repository         # JPA 方法
+├── DAO                # DAO 層，操作資料庫
+├── Entity             # ORM 映射資料表
+├── DTO                # 資料傳輸物件
+├── Utils              # 共用層，包含 JWT 等
+├── Exception          # 自訂例外處理
+├── Response           # 統一回傳格式封裝
+├── Enums              # 枚舉類型定義
+├── Config             # Spring 設定（CORS）
+└── Valid              # 自訂驗證規則
 ```
 
-5. 離開
+---
 
-    `exit;`
+## 📌 API 清單（共 10 支）
 
-6. 用 SYS 身分連 PDB
+| 編號 | 功能 | 路徑 |
+|------|------|------|
+| 1 | 使用者註冊 | `POST /api/user/register` |
+| 2 | 使用者登入 | `POST /api/user/login` |
+| 3 | 使用者登出 | `POST /api/user/logout` |
+| 4 | 查詢使用者資訊 | `GET /api/user/query-user` |
+| 5 | 新增貼文 | `POST /api/post/create-post` |
+| 6 | 查詢所有貼文（分頁查詢） | `GET /api/post/query-posts` |
+| 7 | 編輯貼文 | `PUT /api/post/update-post` |
+| 8 | 刪除貼文（含留言） | `DELETE /api/post/delete-post` |
+| 9 | 新增留言 | `POST /api/comment/create-comment` |
+| 10 | 查詢貼文留言 | `GET /api/comment/query-comments` |
 
-    `sqlplus SYS/steven051225@localhost:1521/SMDB as sysdba`
+🧪 Postman 測試檔案：[下載連結](https://drive.google.com/uc?export=download&id=1KBRUL9vdq2cnxV6Og4wrYUjTZnAXpCUF)
 
-7. 測試連線
+---
 
-    `SELECT 'Connection Successful' AS TEST FROM dual;`
+## 🛢 資料庫建置流程
 
-8. 確保切換到 PDB
+### 🔌 連線到 Oracle 容器
+```bash
+docker exec -it oracle19c bash
+```
 
-    `ALTER SESSION SET CONTAINER = SMDB;`
+### 🔐 進入 SQL*Plus（以 sysdba 身分）
+```bash
+sqlplus / as sysdba
+```
 
-9. 建立用戶
+### 📦 建立 PDB
+```sql
+CREATE PLUGGABLE DATABASE SMDB 
+ADMIN USER steven IDENTIFIED BY steven 
+FILE_NAME_CONVERT = ('/opt/oracle/oradata/ORCLCDB/', '/opt/oracle/oradata/SMDB/');
+```
 
-    `CREATE USER tom IDENTIFIED BY tom;`
+### ▶️ 開啟 PDB
+```sql
+ALTER PLUGGABLE DATABASE SMDB OPEN;
+```
 
-10. 授予用戶創建和連線的權限
-
-    `GRANT CONNECT, RESOURCE TO tom;`
-
-11. 確認有建立到用戶 tom
-
-    `SELECT username FROM all_users WHERE username = 'TOM';`
-
-12. 授予用戶資料庫管理員 (DBA) 權限
-
-    `GRANT DBA TO tom;`
-
-13. 打開 SQL Developer 建立連線、資料表、序列、觸發器、DDL 和 DML
-
-- 建立 ID 序列
+### 🔍 確認目前 PDB 狀態
+```sql
+SHOW PDBS;
+```
 
 ```sql
--- CREATE SEQUENCE
+CON_ID CON_NAME     OPEN MODE  RESTRICTED
+------ ------------- ---------- ----------
+2      PDB$SEED     READ ONLY  NO
+3      ORCLPDB1     READ WRITE NO
+4      SMDB         READ WRITE NO
+```
+
+### ❌ 離開 SQL*Plus
+```bash
+exit
+```
+
+---
+
+### 🔑 連線至 PDB 並授權
+```bash
+sqlplus SYS/steven051225@localhost:1521/SMDB as sysdba
+```
+
+```sql
+-- 測試連線
+SELECT 'Connection Successful' AS TEST FROM dual;
+
+-- 切換容器
+ALTER SESSION SET CONTAINER = SMDB;
+
+-- 建立用戶
+CREATE USER tom IDENTIFIED BY tom;
+
+-- 授權用戶
+GRANT CONNECT, RESOURCE TO tom;
+GRANT DBA TO tom;
+
+-- 確認用戶建立成功
+SELECT username FROM all_users WHERE username = 'TOM';
+```
+
+---
+
+## 🗃 資料表自動編號設置
+
+### 📌 建立序列
+```sql
 CREATE SEQUENCE SEQ_USERS START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE SEQ_POSTS START WITH 1 INCREMENT BY 1;
 CREATE SEQUENCE SEQ_COMMENTS START WITH 1 INCREMENT BY 1;
+```
 
--- UPDATE SEQUENCE
+### 🔄 重設序列
+```sql
 ALTER SEQUENCE SEQ_USERS RESTART START WITH 1;
 ALTER SEQUENCE SEQ_POSTS RESTART START WITH 1;
 ALTER SEQUENCE SEQ_COMMENTS RESTART START WITH 1;
 ```
 
-- 建立新增 ID 與更新時間的觸發器
+---
+
+### ⚡ 建立觸發器：自動產生 ID
 
 ```sql
--- 新增資料表 ID
-
+-- USERS
 CREATE OR REPLACE TRIGGER TRG_USERS_ID
 BEFORE INSERT ON USERS
 FOR EACH ROW
@@ -126,6 +161,8 @@ BEGIN
     END IF;
 END;
 /
+
+-- POSTS
 CREATE OR REPLACE TRIGGER TRG_POSTS_ID
 BEFORE INSERT ON POSTS
 FOR EACH ROW
@@ -135,6 +172,8 @@ BEGIN
     END IF;
 END;
 /
+
+-- COMMENTS
 CREATE OR REPLACE TRIGGER TRG_COMMENTS_ID
 BEFORE INSERT ON COMMENTS
 FOR EACH ROW
@@ -143,12 +182,19 @@ BEGIN
         SELECT SEQ_COMMENTS.NEXTVAL INTO :NEW.COMMENT_ID FROM DUAL;
     END IF;
 END;
+/
+```
 
--- 新增資料更新時間
+---
+
+### 🕒 建立觸發器：自動更新 `UPDATED_AT`
+
+```sql
 CREATE OR REPLACE TRIGGER TRG_POST_UPDATED_AT
 BEFORE UPDATE ON POSTS
 FOR EACH ROW
 BEGIN
     :NEW.UPDATED_AT := CURRENT_TIMESTAMP;
 END;
+/
 ```
