@@ -2,6 +2,8 @@
 
 > Frontend：https://github.com/StevenShih-0402/SocialMedia_Frontend
 
+![image](https://github.com/user-attachments/assets/546359e5-fdf3-402a-8f9a-73173cb50f6e)
+
 Note:
 - IntelliJ IDEA + Gradle
 - JDK 17
