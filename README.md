@@ -80,6 +80,8 @@ ADMIN USER steven IDENTIFIED BY steven
 FILE_NAME_CONVERT = ('/opt/oracle/oradata/ORCLCDB/', '/opt/oracle/oradata/SMDB/');
 ```
 
+>如果是在本地 Oracle，`FILE_NAME_CONVERT` 的路徑要存放 `PDBSEED\SYSTEM01.DBF` 所在的路徑。PDBSEED 是 Oracle 19c 建立 Pluggable Database (PDB) 的「母體」，如果它找不到或壞掉，建立 PDB 或啟動 CDB 都會失敗。
+
 ### ▶️ 開啟 PDB
 ```sql
 ALTER PLUGGABLE DATABASE SMDB OPEN;
