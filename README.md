@@ -4,7 +4,7 @@
 
 🔗 前端專案：[SocialMedia_Frontend](https://github.com/StevenShih-0402/SocialMedia_Frontend)
 
-![系統畫面](https://github.com/user-attachments/assets/546359e5-fdf3-402a-8f9a-73173cb50f6e)
+![流程圖](https://github.com/user-attachments/assets/05361ca8-0abb-4353-86df-dfd35ab8192e)
 
 ---
 
