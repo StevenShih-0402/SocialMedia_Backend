@@ -12,5 +12,6 @@ import lombok.experimental.SuperBuilder;
 public class CommentCreateDto {
     private Integer userId;
     private Integer postId;
+    private Integer parentId;
     private String content;
 }

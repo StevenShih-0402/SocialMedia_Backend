@@ -13,5 +13,6 @@ public class CommentDto {
     private Integer id;
     private String userName;
     private Integer postId;
+    private Integer parentId;
     private String content;
 }

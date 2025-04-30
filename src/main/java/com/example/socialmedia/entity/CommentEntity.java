@@ -30,6 +30,9 @@ public class CommentEntity {
     @Column(name = "CONTENT")
     private String content;
 
+    @Column(name = "PARENT_ID")
+    private Integer parentId;
+
     @Column(name = "CREATED_AT", insertable = false, updatable = false)
     private LocalDateTime createdAt;
 }

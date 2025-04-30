@@ -15,6 +15,8 @@ public class CommentCreateRq {
     @NotNull
     private Integer postId;
 
+    private Integer parentId;
+
     @NotBlank
     @Size(max = 200)
     private String content;
