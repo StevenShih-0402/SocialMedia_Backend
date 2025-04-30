@@ -19,6 +19,7 @@ public class CommentDao {
 
         commentData.setUserId(commentCreateDto.getUserId());
         commentData.setPostId(commentCreateDto.getPostId());
+        commentData.setParentId(commentCreateDto.getParentId());
         commentData.setContent(commentCreateDto.getContent());
 
         return commentRepository.save(commentData);

@@ -31,17 +31,18 @@ public class CommentService {
                 .postId(commentCreateRq.getPostId())
                 .userId(jwtUtils.getLoginUserId())
                 .content(commentCreateRq.getContent())
+                .parentId(commentCreateRq.getParentId())
                 .build();
 
         CommentEntity newData = commentDao.createComment(commentCreateDto);
 
         return CommentDto.builder()
-                .id(newData.getUserId())
+                .id(newData.getId())
                 .userName(userDao.findUserById(newData.getUserId()).getUserName())
                 .postId(newData.getPostId())
                 .content(newData.getContent())
+                .parentId(newData.getParentId())
                 .build();
-
     }
 
     public List<CommentDto> query(CommentQueryRq commentQueryRq){
@@ -66,6 +67,7 @@ public class CommentService {
                 .postId(commentEntity.getPostId())
                 .userName(userDao.findUserById(commentEntity.getUserId()).getUserName())
                 .content(commentEntity.getContent())
+                .parentId(commentEntity.getParentId())
                 .build();
     }
 }
